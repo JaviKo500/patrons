@@ -50,24 +50,35 @@ class QueryBuilder {
   }
 
   select(...fields: string[]): QueryBuilder {
-    throw new Error('Method not implemented.');
+    this.fields = [...fields, ...this.fields];
+    return this;
   }
 
   where(condition: string): QueryBuilder {
-    throw new Error('Method not implemented.');
+    this.conditions = [...this.conditions, condition];
+    return this;
   }
 
   orderBy(field: string, direction: 'ASC' | 'DESC' = 'ASC'): QueryBuilder {
-    throw new Error('Method not implemented.');
+    const orderBy = `order by ${field} ${direction}`;
+    this.orderFields = [...this.orderFields, orderBy];
+    return this;
   }
 
   limit(count: number): QueryBuilder {
-    throw new Error('Method not implemented.');
+    this.limitCount = count;
+    return this;
   }
 
   execute(): string {
     // Select id, name, email from users where age > 18 and country = 'Cri' order by name ASC limit 10;
-    throw new Error('Method not implemented.');
+    const fields = this.fields.length > 0 ? this.fields.join(', ') : '*';
+    const whereClause = this.conditions.length > 0 ? `where ${this.conditions.join(' AND ')}` : '';
+    const orderByClause = this.orderFields.length > 0 ? this.orderFields.join(', ') : '';
+    const limitClause = this.limitCount ? `limit ${this.limitCount}` : '';
+    let query = 
+      `select ${ fields } from ${this.table} ${whereClause} ${orderByClause} ${limitClause};`;
+    return query;
   }
 }
 
@@ -82,6 +93,29 @@ function main() {
 
   console.log('%cConsulta:\n', COLORS.red);
   console.log(usersQuery);
+
+  const usersQuery2 = new QueryBuilder('users')
+    .select('id')
+    .select('name')
+    .where('age > 18')
+    .where('age < 20')
+    .where("country = 'Cri'") // Esto debe de hacer una condición AND
+    .orderBy('name', 'ASC')
+    .orderBy('age', 'DESC')
+    .execute();
+
+  console.log('%cConsulta 2:\n', COLORS.red);
+  console.log(usersQuery2);
+  const usersQuery3 = new QueryBuilder('users')
+    .where('age > 18')
+    .where('age < 20')
+    .where("country = 'Cri'") // Esto debe de hacer una condición AND
+    .orderBy('name', 'ASC')
+    .orderBy('age', 'DESC')
+    .execute();
+
+  console.log('%cConsulta 2:\n', COLORS.red);
+  console.log(usersQuery3);
 }
 
 main();
