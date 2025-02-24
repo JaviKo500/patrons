@@ -1,3 +1,4 @@
+import { COLORS } from '../helpers/colors.ts';
 /**
  * ! Patrón Builder:
  * Es un patrón de diseño creacional que nos permite construir objetos complejos
@@ -25,7 +26,7 @@ class Computer {
       CPU: ${this.cpu}
       RAM: ${this.ram}
       Storage: ${this.storage}
-      GPU: ${this.gpu}`
+      GPU: ${this.gpu ?? 'not defined'}`
     );
   }
 }
@@ -62,3 +63,28 @@ class ComputerBuilder {
     return this.computer;
   }
 }
+
+function main() {
+  const basicComputer = new ComputerBuilder()
+  .setCpu('inter core 2 dual')
+  .setRam('8 GB')
+  .setStorage('256 GB')
+  .build();
+
+  console.log('<--------------- JK 01-builder --------------->');
+  console.log('Basic Computer:', COLORS.blue);
+  console.log(basicComputer);
+
+  const gamerComputer = new ComputerBuilder()
+  .setCpu('Intel Core i7-10870H')
+  .setRam('32 GB')
+  .setStorage('2 TB M.2')
+  .setGpu('Nvidia GeForce GTX 4090')
+  .build();
+
+  console.log('<--------------- JK 01-builder --------------->');
+  console.log('Gamer Computer:', COLORS.blue);
+  console.log(gamerComputer);
+}
+
+main();
