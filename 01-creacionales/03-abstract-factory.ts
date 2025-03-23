@@ -61,10 +61,10 @@ export class FastFoodRestaurant implements Restaurant {
      
   }
   createHamburger(): Hamburger {
-    return new ChickenHamburger();
+    return new BeefHamburger();
   }
   createDrink(): Drink {
-    return new Water();
+    return new Beer();
   }
 }
 
